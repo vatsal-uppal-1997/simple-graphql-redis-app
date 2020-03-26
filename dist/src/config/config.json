@@ -1,0 +1,7 @@
+{
+    "mongo": {
+        "password": "sfcZ7UBdUiGe3ySn",
+        "url": "mongodb+srv://cereal:sfcZ7UBdUiGe3ySn@nigerianboi69-bf6wr.mongodb.net/test?retryWrites=true&w=majority"
+    },
+    "secret": "NIGERianBoi384"
+}
