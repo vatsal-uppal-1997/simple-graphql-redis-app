@@ -5,15 +5,22 @@
   "main": "index.ts",
   "author": "Vatsal Uppal",
   "license": "MIT",
+  "scripts": {
+    "start:dev": "ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/src/index.js"
+  },
   "dependencies": {
-    "@types/bcrypt": "^3.0.0",
-    "@types/ioredis": "^4.14.9",
-    "@types/jsonwebtoken": "^8.3.8",
-    "@types/mongoose": "^5.7.7",
     "apollo-server": "^2.11.0",
     "bcrypt": "^4.0.1",
     "ioredis": "^4.16.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.6"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/ioredis": "^4.14.9",
+    "@types/jsonwebtoken": "^8.3.8",
+    "@types/mongoose": "^5.7.7"
   }
 }
