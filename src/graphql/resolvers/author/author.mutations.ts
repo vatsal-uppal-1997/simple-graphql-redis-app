@@ -1,4 +1,4 @@
-import authorModel, { IAuthor } from '../../../mongo/schemas/author.schema'
+import authorModel from '../../../mongo/schemas/author.schema'
 import jwt from 'jsonwebtoken'
 import { JWT_SECRET } from '../../index'
 
