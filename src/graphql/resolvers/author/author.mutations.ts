@@ -2,13 +2,6 @@ import authorModel from '../../../mongo/schemas/author.schema'
 import jwt from 'jsonwebtoken'
 import { JWT_SECRET } from '../../index'
 
-
-export const CACHE_KEYS = {
-  AUTHORS_ARR: 'authors_arr',
-  AUTHORS_OBJ: 'authors_obj'
-} as const
-
-
 export default {
 
   register: async (_: any, args: any) => {
