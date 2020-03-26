@@ -11,8 +11,15 @@ export const JWT_SECRET = 'NOT_SO_SECURE_ISNT_IT'
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  introspection: true,
+  playground: true,
   context: async ({ req }) => {
     const token = req.headers.authorization || "";
+
+    if (!token) {
+      return {}
+    }
+
     const userId = (jwt.verify(token, JWT_SECRET) as any).id
 
     const userInfo = await authorModel.findById(userId)

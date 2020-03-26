@@ -23,14 +23,14 @@ export default gql`
     body: String
   }
 
-  extends type Query {
+  extend type Query {
 
-    getBlogs(): [Blog]!
+    getBlogs: [Blog]!
     getBlog(id: String): Blog!
 
   }
 
-  extends type Mutation {
+  extend type Mutation {
 
     addBlog(input: AddBlogInput!): Blog!
     updateBlog(input: UpdateBlogInput!): Blog!
@@ -38,11 +38,11 @@ export default gql`
 
   }
 
-  extends type Subscription {
+  type Subscription {
 
-    blogAdded():  Blog!
-    blogDeleted():  Blog!
-    blogUpdated():  Blog!
+    blogAdded:  Blog!
+    blogDeleted:  Blog!
+    blogUpdated:  Blog!
 
   }
 

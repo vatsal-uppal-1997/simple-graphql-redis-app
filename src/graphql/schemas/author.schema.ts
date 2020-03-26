@@ -27,14 +27,14 @@ export default gql`
     password: String!
   }
 
-  extends type Query {
+  type Query {
 
-    getProfiles(): [Author]!
+    getProfiles: [Author]!
     getProfile(id: String!): Author!
 
   }
 
-  extends type Mutation {
+  type Mutation {
 
     register(input: RegisterInput!): Author!
     login(input: LoginInput!):  Tokens!

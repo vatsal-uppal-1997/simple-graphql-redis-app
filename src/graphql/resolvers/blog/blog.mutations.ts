@@ -20,7 +20,7 @@ export default {
     // invalidate the cache
     redis.del(CACHE_KEYS.BLOGS_ARR, CACHE_KEYS.BLOGS_OBJ)
     pubsub.publish(EVENTS.BLOG_ADDED, { blogAdded: blog });
-    return blog
+    return { ...blog.toObject(), author: userInfo }
   },
 
   updateBlog: async (_: any, args: any, context: any) => {
@@ -51,12 +51,12 @@ export default {
       $set: {
         ...update
       }
-    }, { new: true })
+    }, { new: true }).lean()
 
     // invalidate the cache
     redis.del(CACHE_KEYS.BLOGS_ARR, CACHE_KEYS.BLOGS_OBJ)
     pubsub.publish(EVENTS.BLOG_UPDATED, { blogUpdated: updatedBlog })
-    return updatedBlog
+    return { ...updatedBlog, author: userInfo }
   },
 
   deleteBlog: async (_: any, args: any, context: any) => {
@@ -76,6 +76,6 @@ export default {
     // invalidate the cache
     redis.del(CACHE_KEYS.BLOGS_ARR, CACHE_KEYS.BLOGS_OBJ)
     pubsub.publish(EVENTS.BLOG_UPDATED, { blogDeleted: blog })
-    return blog
+    return { ...blog, author: userInfo }
   }
 }

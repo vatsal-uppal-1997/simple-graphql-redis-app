@@ -1,4 +1,5 @@
 import blogModel from '../../../mongo/schemas/blog.schema'
+import authorModel from '../../../mongo/schemas/author.schema'
 import redis from '../../../redis'
 import { authed } from '../../guards/authed.guard'
 
@@ -13,13 +14,22 @@ export default {
     authed(context)
     const isCached = await redis.get(CACHE_KEYS.BLOGS_ARR)
     if (isCached) {
+      console.log('cache hit for getBlogs')
       return JSON.parse(isCached)
     }
 
     const blogs = await blogModel.find({}).lean()
-    redis.set(CACHE_KEYS.BLOGS_ARR, JSON.stringify(blogs))
+    let withAuthors = []
+    
+    for (let i=0; i<blogs.length; i++) {
+      const blog = blogs[i]
+      const author = await authorModel.findById(blog.authorID)
+      withAuthors.push({ ...blog, author })
+    }
 
-    return blogs
+    redis.set(CACHE_KEYS.BLOGS_ARR, JSON.stringify(withAuthors))
+
+    return withAuthors
   },
 
   getBlog: async (_: any, args: any, context: any) => {
@@ -31,18 +41,22 @@ export default {
       const parsed = JSON.parse(isCached)
 
       if (parsed[id]) {
+        console.log('cache hit for getBlog')
         return parsed[id]
       }
     }
 
-    const blog = await blogModel.findById(id)
+    const blog = await blogModel.findById(id).lean()
+    const author = await authorModel.findById(blog?.authorID).lean()
 
     if (isCached) {
       const parsed = JSON.parse(isCached)
 
-      redis.set(CACHE_KEYS.BLOGS_OBJ, JSON.stringify({ ...parsed, [id]: blog }))
+      redis.set(CACHE_KEYS.BLOGS_OBJ, JSON.stringify({ ...parsed, [id]: { ...blog, author } }))
+    } else {
+      redis.set(CACHE_KEYS.BLOGS_OBJ, JSON.stringify({ [id]: { ...blog, author } }))
     }
 
-    return blog
+    return { ...blog, author }
   }
 }
