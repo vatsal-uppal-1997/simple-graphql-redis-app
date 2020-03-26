@@ -19,6 +19,7 @@ export default gql`
     lastName: String!
     email:  String!
     userName: String!
+    password: String!
   }
 
   input LoginInput {
