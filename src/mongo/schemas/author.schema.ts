@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import bcrypt, { hash } from 'bcrypt'
+import bcrypt from 'bcrypt'
 
 export interface IAuthor extends mongoose.Document {
   firstName: string;
