@@ -1,0 +1,3 @@
+
+
+export const JWT_SECRET = 'NOT_SO_SECURE_ISNT_IT'
