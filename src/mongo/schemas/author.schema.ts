@@ -10,7 +10,7 @@ export interface IAuthor extends mongoose.Document {
 }
 
 export interface IAuthorModel extends mongoose.Model<IAuthor> {  
-  verifyPassword(email: String, password: String): Promise<Boolean>
+  verifyPassword(email: String, password: String): Promise<IAuthor | false>
 }
 
 const AuthorSchema = new mongoose.Schema({
@@ -67,9 +67,9 @@ AuthorSchema.pre("save", async function () {
 AuthorSchema.statics.verifyPassword = async function (email: String, password: String) {
   const author: IAuthor = await this.findOne({ email })
 
-  if (author.email) {
+  if (author && author.email) {
     const hashedPassword = author.password;
-    return await bcrypt.compare(password, hashedPassword)
+    return (await bcrypt.compare(password, hashedPassword)) ? author: false
   }
 
   return false
