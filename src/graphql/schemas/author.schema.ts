@@ -38,7 +38,6 @@ export default gql`
 
     register(input: RegisterInput!): Author!
     login(input: LoginInput!):  Tokens!
-    deleteProfile(id: String!): Author!
 
   }
 `
