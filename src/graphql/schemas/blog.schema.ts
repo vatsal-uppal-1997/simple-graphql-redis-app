@@ -18,6 +18,7 @@ export default gql`
   }
 
   input UpdateBlogInput {
+    id: String!
     title:  String
     body: String
   }
@@ -33,7 +34,7 @@ export default gql`
 
     addBlog(input: AddBlogInput!): Blog!
     updateBlog(input: UpdateBlogInput!): Blog!
-    deleteBlog(id: String): Blog!
+    deleteBlog(id: String!): Blog!
 
   }
 
@@ -42,7 +43,7 @@ export default gql`
     blogAdded():  Blog!
     blogDeleted():  Blog!
     blogUpdated():  Blog!
-    
+
   }
 
 `
