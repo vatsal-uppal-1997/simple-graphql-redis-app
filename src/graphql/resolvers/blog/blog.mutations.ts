@@ -19,8 +19,9 @@ export default {
 
     // invalidate the cache
     redis.del(CACHE_KEYS.BLOGS_ARR, CACHE_KEYS.BLOGS_OBJ)
-    pubsub.publish(EVENTS.BLOG_ADDED, { blogAdded: blog });
-    return { ...blog.toObject(), author: userInfo }
+    const withAuthor = { ...blog.toObject(), author: userInfo }
+    pubsub.publish(EVENTS.BLOG_ADDED, { blogAdded: withAuthor });
+    return withAuthor
   },
 
   updateBlog: async (_: any, args: any, context: any) => {
@@ -55,8 +56,9 @@ export default {
 
     // invalidate the cache
     redis.del(CACHE_KEYS.BLOGS_ARR, CACHE_KEYS.BLOGS_OBJ)
-    pubsub.publish(EVENTS.BLOG_UPDATED, { blogUpdated: updatedBlog })
-    return { ...updatedBlog, author: userInfo }
+    const withAuthor = { ...updatedBlog, author: userInfo }
+    pubsub.publish(EVENTS.BLOG_UPDATED, { blogUpdated: withAuthor })
+    return withAuthor
   },
 
   deleteBlog: async (_: any, args: any, context: any) => {
@@ -75,7 +77,8 @@ export default {
 
     // invalidate the cache
     redis.del(CACHE_KEYS.BLOGS_ARR, CACHE_KEYS.BLOGS_OBJ)
-    pubsub.publish(EVENTS.BLOG_UPDATED, { blogDeleted: blog })
-    return { ...blog, author: userInfo }
+    const withAuthor = { ...blog, author: userInfo }
+    pubsub.publish(EVENTS.BLOG_UPDATED, { blogDeleted: withAuthor })
+    return withAuthor
   }
 }
