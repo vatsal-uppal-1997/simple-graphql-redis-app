@@ -6,6 +6,7 @@ import { authed } from '../../guards/authed.guard'
 export const CACHE_KEYS = {
   BLOGS_ARR: 'blogs_arr',
   BLOGS_OBJ: 'blogs_obj',
+  BLOGS_AUTHOR: 'blogs_author',
 } as const
 
 export default {
@@ -20,8 +21,8 @@ export default {
 
     const blogs = await blogModel.find({}).lean()
     let withAuthors = []
-    
-    for (let i=0; i<blogs.length; i++) {
+
+    for (let i = 0; i < blogs.length; i++) {
       const blog = blogs[i]
       const author = await authorModel.findById(blog.authorID)
       withAuthors.push({ ...blog, author })
@@ -58,5 +59,34 @@ export default {
     }
 
     return { ...blog, author }
+  },
+
+  getBlogsByAuthor: async (_: any, args: any, context: any) => {
+    authed(context)
+
+    const { authorID } = args
+    const isCached = await redis.get(CACHE_KEYS.BLOGS_AUTHOR)
+    if (isCached) {
+      const parsed = JSON.parse(isCached)
+
+      if (parsed[authorID]) {
+        console.log('cache hit for getBlog')
+        return parsed[authorID]
+      }
+    }
+
+    const blogs = await blogModel.find({ authorID }).lean()
+    const author = await authorModel.findById(authorID).lean()
+    const withAuthor = blogs.map(blog => ({ ...blog, author }))
+
+    if (isCached) {
+      const parsed = JSON.parse(isCached)
+
+      redis.set(CACHE_KEYS.BLOGS_AUTHOR, JSON.stringify({ ...parsed, [authorID]: withAuthor }))
+    } else {
+      redis.set(CACHE_KEYS.BLOGS_OBJ, JSON.stringify({ [authorID]: withAuthor }))
+    }
+
+    return withAuthor
   }
 }

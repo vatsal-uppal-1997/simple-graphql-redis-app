@@ -26,7 +26,8 @@ export default gql`
   extend type Query {
 
     getBlogs: [Blog]!
-    getBlog(id: String): Blog!
+    getBlog(id: String!): Blog!
+    getBlogsByAuthor(authorID: String!): [Blog]!
 
   }
 
